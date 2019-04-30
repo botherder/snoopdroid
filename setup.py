@@ -25,7 +25,7 @@ requires = (
     "halo",
     "requests",
     "terminaltables",
-    "adb @ git+https://github.com/google/python-adb.git#egg=adb",
+    "adb",
 )
 
 setup(

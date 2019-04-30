@@ -40,7 +40,16 @@ class Acquisition(object):
         return output.strip().replace("package:", "")
 
     def connect(self):
-        signer = sign_pythonrsa.PythonRSASigner.FromRSAKeyPath(os.path.expanduser('~/.android/adbkey'))
+        # Maybe one day they will merge:
+        # https://github.com/google/python-adb/pull/142
+        priv_key_path = os.path.expanduser('~/.android/adbkey')
+        with open(priv_key_path, "rb") as handle:
+            priv_key = handle.read()
+        pub_key_path = priv_key_path + ".pub"
+        with open(pub_key_path, "rb") as handle:
+            pub_key = handle.read()
+
+        signer = sign_pythonrsa.PythonRSASigner(pub_key, priv_key)
         self.device = adb_commands.AdbCommands()
 
         try:
