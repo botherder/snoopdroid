@@ -20,9 +20,9 @@ import sys
 import argparse
 import datetime
 
-from ui import info, logo
-from acquisition import Acquisition
-from virustotal import virustotal_lookup
+from snoopdroid.ui import info, logo
+from snoopdroid.acquisition import Acquisition
+from snoopdroid.virustotal import virustotal_lookup
 
 def main():
     parser = argparse.ArgumentParser(description="Extract information from Android device")

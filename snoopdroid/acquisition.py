@@ -22,8 +22,8 @@ from usb1 import USBErrorBusy
 from adb import adb_commands
 from adb import sign_m2crypto
 
-from ui import PullProgress, info, highlight
-from utils import get_sha256
+from snoopdroid.ui import PullProgress, info, highlight
+from snoopdroid.utils import get_sha256
 
 class Package(object):
     def __init__(self, name, files=None):
