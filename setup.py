@@ -25,6 +25,7 @@ requires = (
     "halo",
     "requests",
     "terminaltables",
+    "adb @ git+https://github.com/google/python-adb.git#egg=adb",
 )
 
 setup(
@@ -37,7 +38,6 @@ setup(
 
     scripts=["bin/snoopdroid",],
     install_requires=requires,
-    dependency_links=["git+https://github.com/google/python-adb.git#egg=adb",],
     packages=["snoopdroid",],
     
     zip_safe=False,
