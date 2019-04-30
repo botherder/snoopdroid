@@ -48,6 +48,9 @@ class Acquisition(object):
         except USBErrorBusy:
             print("ERROR: device is busy, maybe run `adb kill-server` and try again.")
             sys.exit(-1)
+        except TypeError:
+            print("ERROR: you might not have adb keys yet. Try to launch `adb devices` first.")
+            sys.exit(-1)
 
     def disconnect(self):
         self.device.Close()
