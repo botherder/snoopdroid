@@ -16,13 +16,15 @@
 
 import os
 import sys
+import time
 import shutil
 from usb1 import USBErrorBusy
 
 from adb import adb_commands
 from adb import sign_pythonrsa
+from adb.usb_exceptions import DeviceAuthError
 
-from snoopdroid.ui import PullProgress, info, highlight
+from snoopdroid.ui import PullProgress, info, highlight, error
 from snoopdroid.utils import get_sha256
 
 class Package(object):
@@ -52,14 +54,20 @@ class Acquisition(object):
         signer = sign_pythonrsa.PythonRSASigner(pub_key, priv_key)
         self.device = adb_commands.AdbCommands()
 
-        try:
-            self.device.ConnectDevice(rsa_keys=[signer])
-        except USBErrorBusy:
-            print("ERROR: device is busy, maybe run `adb kill-server` and try again.")
-            sys.exit(-1)
-        except TypeError:
-            print("ERROR: you might not have adb keys yet. Try to launch `adb devices` first.")
-            sys.exit(-1)
+        while True:
+            try:
+                self.device.ConnectDevice(rsa_keys=[signer])
+            except USBErrorBusy:
+                print(error("Device is busy, maybe run `adb kill-server` and try again."))
+                sys.exit(-1)
+            except DeviceAuthError:
+                print(error("You need to authorize this computer on the Android device. Retrying in 5 seconds..."))
+                time.sleep(5)
+            except Exception as e:
+                print(error(e))
+                sys.exit(-1)
+            else:
+                break
 
     def disconnect(self):
         self.device.Close()
