@@ -20,7 +20,7 @@ import shutil
 from usb1 import USBErrorBusy
 
 from adb import adb_commands
-from adb import sign_m2crypto
+from adb import sign_pythonrsa
 
 from snoopdroid.ui import PullProgress, info, highlight
 from snoopdroid.utils import get_sha256
@@ -40,7 +40,7 @@ class Acquisition(object):
         return output.strip().replace("package:", "")
 
     def connect(self):
-        signer = sign_m2crypto.M2CryptoSigner(os.path.expanduser('~/.android/adbkey'))
+        signer = sign_pythonrsa.PythonRSASigner.FromRSAKeyPath(os.path.expanduser('~/.android/adbkey'))
         self.device = adb_commands.AdbCommands()
 
         try:

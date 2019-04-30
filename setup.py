@@ -20,8 +20,9 @@ from setuptools import setup
 
 description = "Pull all apks from an Android device and check for malicious apps"
 requires = (
-    "tqdm",
+    "rsa",
     "adb",
+    "tqdm",
     "halo",
     "requests",
     "terminaltables",
