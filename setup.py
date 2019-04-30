@@ -21,7 +21,6 @@ from setuptools import setup
 description = "Pull all apks from an Android device and check for malicious apps"
 requires = (
     "rsa",
-    "adb",
     "tqdm",
     "halo",
     "requests",
@@ -38,6 +37,7 @@ setup(
 
     scripts=["bin/snoopdroid",],
     install_requires=requires,
+    dependency_links=["git+https://github.com/google/python-adb.git#egg=adb",],
     packages=["snoopdroid",],
     
     zip_safe=False,
