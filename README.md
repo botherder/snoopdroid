@@ -1,6 +1,10 @@
 # Snoopdroid
 
-# Debian
+Snoopdroid is a simple utility to automate the process of extracting installed apps from an Android phone using the [Android Debug Bridge](https://developer.android.com/studio/command-line/adb). Optionally, Snoopdroid is able to lookup the extracted packages on various online services in order to attempt to immediately recognize any known malicious apps.
+
+## Installation
+
+### Debian GNU/Linux
 
 In order to run Snoopdroid on Debian you will need to install the following dependencies:
 
@@ -12,9 +16,10 @@ Make sure to generate your Android keys with:
 
 You can then install Snoopdroid with pip3:
 
+    pip3 install rsa
     pip3 install snoopdroid
 
-## Mac
+### Mac
 
 Running Snoopdroid on Mac requires Xcode and [homebrew](https://brew.sh) to be installed.
 
@@ -32,4 +37,5 @@ Make sure to generate your Android private key with:
 
 You can now install Snoopdroid with pip3:
 
+    pip3 install rsa
     pip3 install snoopdroid
