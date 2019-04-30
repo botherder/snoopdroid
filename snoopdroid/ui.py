@@ -45,4 +45,4 @@ def highlight(text):
     return colored(text, "cyan", attrs=["bold",])
 
 def error(text):
-    return colored("!!!", "red", attrs=["bold",]) + " " + text
+    return colored("!!!", "red", attrs=["bold",]) + " Error: " + text

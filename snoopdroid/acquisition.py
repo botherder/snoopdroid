@@ -64,7 +64,7 @@ class Acquisition(object):
                 print(error("You need to authorize this computer on the Android device. Retrying in 5 seconds..."))
                 time.sleep(5)
             except Exception as e:
-                print(error(e))
+                print(error(repr(e)))
                 sys.exit(-1)
             else:
                 break
