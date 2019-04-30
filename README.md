@@ -14,13 +14,6 @@ You can then install Snoopdroid with pip3:
 
     pip3 install snoopdroid
 
-tqdm
-adb
-colorama
-termcolor
-halo
-terminaltables
-
 ## Mac
 
 Running Snoopdroid on Mac requires Xcode and [homebrew](https://brew.sh) to be installed.
@@ -32,22 +25,12 @@ In order to install adb use:
 Make sure to generate your Android private key with:
 
     adb keygen $HOME/.android/adbkey
-
-Because Mac's platform-tools do not generate a public key, we need to derive it from the private key:
-
-    ssh-keygen -y -f $HOME/.android/adbkey | sed 's/ssh-rsa //g' > $HOME/.android/adbkey.pub
+    adb pubkey $HOME/.android/adbkey > $HOME/.android/adbkey.pub
 
 You will also need to install M2Crypto and its dependencies like this:
 
     brew install openssl
     brew install swig
-
-Finally:
-
-    env LDFLAGS="-L$(brew --prefix openssl)/lib" \
-    CFLAGS="-I$(brew --prefix openssl)/include" \
-    SWIG_FEATURES="-cpperraswarn -includeall -I$(brew --prefix openssl)/include" \
-    pip3 install m2crypto
 
 You can now install Snoopdroid with pip3:
 
