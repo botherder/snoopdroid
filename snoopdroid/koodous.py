@@ -20,7 +20,7 @@ import requests
 from halo import Halo
 from terminaltables import AsciiTable
 
-from snoopdroid.ui import info, highlight, green, red
+from .ui import info, highlight, green, red
 
 def get_koodous_report(sha256):
     url = "https://api.koodous.com/apks/{}".format(sha256)

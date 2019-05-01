@@ -21,7 +21,7 @@ import requests
 from halo import Halo
 from terminaltables import AsciiTable
 
-from snoopdroid.ui import info, highlight, red
+from .ui import info, highlight, red
 
 def get_virustotal_report(apikey, sha256):
     url = "https://www.virustotal.com/vtapi/v2/file/report?apikey={apikey}&resource={resource}"

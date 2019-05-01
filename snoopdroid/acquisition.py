@@ -24,8 +24,8 @@ from adb import adb_commands
 from adb import sign_pythonrsa
 from adb.usb_exceptions import DeviceAuthError
 
-from snoopdroid.ui import PullProgress, info, highlight, error
-from snoopdroid.utils import get_sha256
+from .ui import PullProgress, info, highlight, error
+from .utils import get_sha256
 
 class Package(object):
     def __init__(self, name, files=None):
