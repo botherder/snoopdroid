@@ -51,7 +51,7 @@ setup(
     license="GPLv3",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Topic :: Security :: Malware",
+        "Topic :: Security",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: Android",
         "Operating System :: POSIX :: Linux",
