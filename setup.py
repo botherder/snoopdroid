@@ -18,7 +18,12 @@
 import os
 from setuptools import setup
 
-description = "Pull all apks from an Android device and check for malicious apps"
+description = "Extract all apks from an Android device and check for malicious apps"
+
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as handle:
+    long_description = handle.read()
+
 requires = (
     "rsa",
     "tqdm",
@@ -30,11 +35,11 @@ requires = (
 
 setup(
     name="snoopdroid",
-    version="1.2",
+    version="1.3",
     author="Claudio Guarnieri",
     author_email="nex@nex.sx",
     description=description,
-    long_description=description,
+    long_description=long_description,
 
     scripts=["bin/snoopdroid",],
     install_requires=requires,
