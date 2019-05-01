@@ -19,6 +19,7 @@
 
 import os
 import sys
+import json
 import time
 import shutil
 from usb1 import USBErrorBusy, USBErrorAccess
@@ -153,6 +154,15 @@ class Acquisition(object):
 
             print("")
 
+    def save_json(self):
+        json_path = os.path.join(self.storage_folder, "packages.json")
+        packages = []
+        for package in self.packages:
+            packages.append(package.__dict__)
+
+        with open(json_path, "w") as handle:
+            json.dump(packages, handle, indent=4)
+
     def run(self):
         self.connect()
 
@@ -160,3 +170,5 @@ class Acquisition(object):
         self.pull_packages()
 
         self.disconnect()
+
+        self.save_json()
