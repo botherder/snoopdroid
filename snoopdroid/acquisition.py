@@ -21,7 +21,7 @@ import os
 import sys
 import time
 import shutil
-from usb1 import USBErrorBusy
+from usb1 import USBErrorBusy, USBErrorAccess
 
 from adb import adb_commands
 from adb import sign_pythonrsa
@@ -60,7 +60,7 @@ class Acquisition(object):
         while True:
             try:
                 self.device.ConnectDevice(rsa_keys=[signer])
-            except USBErrorBusy:
+            except (USBErrorBusy, USBErrorAccess):
                 print(error("Device is busy, maybe run `adb kill-server` and try again."))
                 sys.exit(-1)
             except DeviceAuthError:
