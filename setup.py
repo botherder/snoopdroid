@@ -35,7 +35,7 @@ requires = (
 
 setup(
     name="snoopdroid",
-    version="1.3",
+    version="1.4",
     author="Claudio Guarnieri",
     author_email="nex@nex.sx",
     description=description,
