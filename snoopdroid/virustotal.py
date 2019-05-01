@@ -21,7 +21,7 @@ import requests
 from halo import Halo
 from terminaltables import AsciiTable
 
-from snoopdroid.ui import info
+from snoopdroid.ui import info, highlight, red
 
 def get_virustotal_report(apikey, sha256):
     url = "https://www.virustotal.com/vtapi/v2/file/report?apikey={apikey}&resource={resource}"
@@ -37,7 +37,7 @@ def virustotal_lookup(apikey, rate, packages):
 
     eta = delay * total_files
 
-    print(info("Looking up all extracted files on VirusTotal."))
+    print(info("Looking up all extracted files on " + highlight("VirusTotal") + " (www.virustotal.com)."))
     print(info("This will take about {} seconds...".format(eta)))
     print("")
 
@@ -68,7 +68,11 @@ def virustotal_lookup(apikey, rate, packages):
                 if report["response_code"] == 0:
                     row.append("")
                 else:
-                    row.append("{}/{}".format(report["positives"], report["total"]))
+                    detections = "{}/{}".format(report["positives"], report["total"])
+                    if report["positives"] > 0:
+                        detections = red(detections)
+
+                    row.append(detections)
 
                 table_data.append(row)
 

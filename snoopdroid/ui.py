@@ -41,8 +41,14 @@ init(autoreset=True)
 def info(text):
     return colored("***", "cyan", attrs=["bold",]) + " " + text
 
+def error(text):
+    return colored("!!!", "red", attrs=["bold",]) + " Error: " + text
+
 def highlight(text):
     return colored(text, "cyan", attrs=["bold",])
 
-def error(text):
-    return colored("!!!", "red", attrs=["bold",]) + " Error: " + text
+def green(text):
+    return colored(text, "green", attrs=["bold",])
+
+def red(text):
+    return colored(text, "red", attrs=["bold",])

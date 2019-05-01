@@ -104,6 +104,7 @@ class Acquisition(object):
         counter = 0
         for package in self.packages:
             counter += 1
+
             print("[{}/{}] Package: {}".format(counter, total_packages, highlight(package.name)))
 
             try:
