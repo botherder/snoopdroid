@@ -25,9 +25,8 @@ Running Snoopdroid on Mac requires Xcode and [homebrew](https://brew.sh) to be i
 
 In order to install adb and other dependencies use:
 
+    brew install openssl swig libusb
     brew install homebrew/cask/android-platform-tools
-    brew install openssl
-    brew install swig
 
 Make sure to generate your Android private key with:
 
