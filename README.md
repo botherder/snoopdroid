@@ -1,9 +1,9 @@
 Snoopdroid
 ==========
 
-<p align="center"><img src="/img/snoopdroid.png?raw=true"/></p>
-
 Snoopdroid is a simple utility to automate the process of extracting installed apps from an Android phone using the [Android Debug Bridge](https://developer.android.com/studio/command-line/adb). Optionally, Snoopdroid is able to lookup the extracted packages on various online services in order to attempt to immediately recognize any known malicious apps.
+
+<p align="center"><img src="/img/snoopdroid.png?raw=true"/></p>
 
 Installation on Debian GNU/Linux
 --------------------------------
