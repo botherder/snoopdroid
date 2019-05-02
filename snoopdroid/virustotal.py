@@ -49,14 +49,14 @@ def virustotal_lookup(packages):
     print(info("Looking up all extracted files on " + highlight("VirusTotal") + " (www.virustotal.com)."))
     print("")
 
-    report = {}
+    detections = {}
 
     def virustotal_query(batch):
         report = get_virustotal_report(batch)
         if report:
             for entry in report:
-                if entry["hash"] not in report and entry["found"] == True:
-                    report[entry["hash"]] = entry["detection_ratio"]
+                if entry["hash"] not in detections and entry["found"] == True:
+                    detections[entry["hash"]] = entry["detection_ratio"]
 
     with Halo(text="", spinner="bouncingBar") as spinner:
         batch = []
@@ -82,13 +82,13 @@ def virustotal_lookup(packages):
         for file in package.files:
             row = [package.name, file["stored_path"],]
 
-            if file["sha256"] in report:
-                detections = report[file["sha256"]]
-                positives = detections.split("/")[0]
+            if file["sha256"] in detections:
+                detection = detections[file["sha256"]]
+                positives = detection.split("/")[0]
                 if int(positives) > 0:
-                    row.append(red(detections))
+                    row.append(red(detection))
                 else:
-                    row.append(detections)
+                    row.append(detection)
             else:
                 row.append("not found")
 
