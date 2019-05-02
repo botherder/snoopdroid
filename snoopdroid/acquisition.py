@@ -37,11 +37,23 @@ class Package(object):
         self.files = files or []
 
 class Acquisition(object):
-    def __init__(self, storage_folder=None, limit=None):
+    def __init__(self, storage_folder=None, limit=None, packages=None):
         self.device = None
-        self.packages = []
+        self.packages = packages or []
         self.storage_folder = storage_folder
         self.limit = limit
+
+    @classmethod
+    def fromJSON(cls, json_path):
+        with open(json_path, "r") as handle:
+            data = json.load(handle)
+
+            packages = []
+            for entry in data:
+                package = Package(entry["name"], entry["files"])
+                packages.append(package)
+
+            return cls(packages=packages)
 
     def __clean_output(self, output):
         return output.strip().replace("package:", "")

@@ -36,7 +36,7 @@ def get_virustotal_report(hashes):
             "image_path": "unknown",
             "creation_datetime": "unknown",
         })
-    headers = {'User-Agent': 'VirusTotal', 'Content-Type': 'application/json'}
+    headers = {"User-Agent": "VirusTotal", "Content-Type": "application/json"}
     res = requests.post(url, headers=headers, json=items)
 
     if res.status_code == 200:

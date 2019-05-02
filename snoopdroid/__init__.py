@@ -35,31 +35,38 @@ def main():
     parser.add_argument("--koodous", action="store_true", help="Check packages on Koodous")
     parser.add_argument("--all", action="store_true", help="Run all available checks")
     parser.add_argument("--limit", default=None, help="Set a limit to the number of packages to extract (mainly for debug purposes)")
+    parser.add_argument("--packages", default=None, help="Instead of acquiring from phone, load an existing packages.json file for lookups (mainly for debug purposes)")
     args = parser.parse_args()
 
-    # TODO: Need to come up with a better folder name.
-    acq_folder = datetime.datetime.now().isoformat().split(".")[0].replace(":", "")
-    storage_folder = os.path.join(args.storage, acq_folder)
+    if not args.packages:
+        # TODO: Need to come up with a better folder name.
+        acq_folder = datetime.datetime.now().isoformat().split(".")[0].replace(":", "")
+        storage_folder = os.path.join(args.storage, acq_folder)
 
-    if not os.path.exists(storage_folder):
-        os.mkdir(storage_folder)
+        if not os.path.exists(storage_folder):
+            os.mkdir(storage_folder)
+
+        print(info("Starting acquisition at folder {}\n".format(storage_folder)))
 
     logo()
 
-    print(info("Starting acquisition at folder {}\n".format(storage_folder)))
-
     try:
-        acq = Acquisition(storage_folder, args.limit)
-        acq.run()
+        if args.packages:
+            acq = Acquisition.fromJSON(args.packages)
+        else:
+            acq = Acquisition(storage_folder, args.limit)
+            acq.run()
+        
+        packages = acq.packages
 
-        if len(acq.packages) == 0:
+        if len(packages) == 0:
             return
 
         if args.virustotal or args.all:
-            virustotal_lookup(acq.packages)
+            virustotal_lookup(packages)
 
         if args.koodous or args.all:
-            koodous_lookup(acq.packages)
+            koodous_lookup(packages)
     except KeyboardInterrupt:
         print("")
         sys.exit(-1)
