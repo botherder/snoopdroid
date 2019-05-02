@@ -37,10 +37,11 @@ class Package(object):
         self.files = files or []
 
 class Acquisition(object):
-    def __init__(self, storage_folder=None):
+    def __init__(self, storage_folder=None, limit=None):
         self.device = None
         self.packages = []
         self.storage_folder = storage_folder
+        self.limit = limit
 
     def __clean_output(self, output):
         return output.strip().replace("package:", "")
@@ -107,6 +108,10 @@ class Acquisition(object):
         total_packages = len(self.packages)
         counter = 0
         for package in self.packages:
+            # This is for debug purposes mainly.
+            if self.limit and counter == int(self.limit):
+                break
+
             counter += 1
 
             print("[{}/{}] Package: {}".format(counter, total_packages, highlight(package.name)))
