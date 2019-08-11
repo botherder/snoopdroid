@@ -14,7 +14,7 @@ In order to run Snoopdroid on Debian you will need to install the following depe
 apt install python3 python3-pip python3-dev build-essential libssl-dev libffi-dev swig android-sdk-platform-tools
 ```
 
-Make sure to generate your Android keys with:
+Make sure to generate your adb keys with:
 
 ```
 adb keygen ~/.android/adbkey
@@ -35,11 +35,11 @@ Running Snoopdroid on Mac requires Xcode and [homebrew](https://brew.sh) to be i
 In order to install adb and other dependencies use:
 
 ```
-brew install openssl swig libusb
+brew install openssl swig libusb python3
 brew install homebrew/cask/android-platform-tools
 ```
 
-Make sure to generate your Android private key with:
+Make sure to generate your adb keys:
 
 ```
 mkdir $HOME/.android
