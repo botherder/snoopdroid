@@ -22,6 +22,7 @@ import sys
 import json
 import time
 import shutil
+import pkg_resources
 from usb1 import USBErrorBusy, USBErrorAccess
 
 from adb import adb_commands
@@ -37,11 +38,14 @@ class Package(object):
         self.files = files or []
 
 class Acquisition(object):
-    def __init__(self, storage_folder=None, limit=None, packages=None):
+    def __init__(self, storage_folder=None, all_apks=False, limit=None, packages=None):
         self.device = None
         self.packages = packages or []
         self.storage_folder = storage_folder
+        self.all_apks = all_apks
         self.limit = limit
+
+        self.__known_good = []
 
     @classmethod
     def fromJSON(cls, json_path):
@@ -55,8 +59,13 @@ class Acquisition(object):
 
             return cls(packages=packages)
 
+    def __load_knowngood(self):
+        knowngood_path = os.path.join('data', 'knowngood.txt')
+        knowngood_string = pkg_resources.resource_string(__name__, knowngood_path)
+        self.__known_good.extend(knowngood_string.split('\n'))
+
     def __clean_output(self, output):
-        return output.strip().replace("package:", "")
+        return output.strip().replace('package:', '')
 
     def connect(self):
         # Maybe one day they will merge:
@@ -97,16 +106,25 @@ class Acquisition(object):
     def get_packages(self):
         print(info("Retrieving package names ..."))
 
+        if not self.all_apks:
+            self.__load_knowngood()
+
         output = self.device.Shell("pm list packages")
+        total = 0
         for line in output.split("\n"):
             package_name = self.__clean_output(line)
             if package_name == "":
                 continue
 
+            total += 1
+
+            if not self.all_apks and package_name in self.__known_good:
+                continue
+
             if package_name not in self.packages:
                 self.packages.append(Package(package_name))
 
-        print(info("There are {} packages installed on the device.".format(len(self.packages))))
+        print(info("There are {} packages installed on the device. I selected {} for inspection.".format(total, len(self.packages))))
         print("")
 
     def pull_packages(self):
@@ -182,10 +200,7 @@ class Acquisition(object):
 
     def run(self):
         self.connect()
-
         self.get_packages()
         self.pull_packages()
-
         self.disconnect()
-
         self.save_json()

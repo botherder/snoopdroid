@@ -33,6 +33,17 @@ requires = (
     "adb",
 )
 
+def get_package_data(package):
+    walk = [(dirpath.replace(package + os.sep, '', 1), filenames)
+            for dirpath, dirnames, filenames in os.walk(package)
+            if not os.path.exists(os.path.join(dirpath, '__init__.py'))]
+
+    filepaths = []
+    for base, filenames in walk:
+        filepaths.extend([os.path.join(base, filename)
+                          for filename in filenames])
+    return {package: filepaths}
+
 setup(
     name="snoopdroid",
     version="2.0",
@@ -44,8 +55,8 @@ setup(
     scripts=["bin/snoopdroid",],
     install_requires=requires,
     packages=["snoopdroid",],
-    
-    zip_safe=False,
+    package_data=get_package_data('snoopdroid'),
+    include_package_data=True,
 
     keywords="security android",
     license="GPLv3",

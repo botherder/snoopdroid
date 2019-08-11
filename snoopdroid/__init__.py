@@ -27,18 +27,20 @@ from .ui import info, logo
 from .acquisition import Acquisition
 from .virustotal import virustotal_lookup
 from .koodous import koodous_lookup
+from .knownbad import known_bad
 
 def main():
     parser = argparse.ArgumentParser(description="Extract information from Android device")
     parser.add_argument("--storage", default=os.getcwd(), help="Specify a different base folder to store the acquisition")
+    parser.add_argument("--limit", default=None, help="Set a limit to the number of packages to extract (mainly for debug purposes)")
+    parser.add_argument("--all-apks", action="store_true", help="Extract all packages installed on the phone, even those marked as safe")
     parser.add_argument("--virustotal", action="store_true", help="Check packages on VirusTotal")
     parser.add_argument("--koodous", action="store_true", help="Check packages on Koodous")
-    parser.add_argument("--all", action="store_true", help="Run all available checks")
-    parser.add_argument("--limit", default=None, help="Set a limit to the number of packages to extract (mainly for debug purposes)")
-    parser.add_argument("--packages", default=None, help="Instead of acquiring from phone, load an existing packages.json file for lookups (mainly for debug purposes)")
+    parser.add_argument("--all-checks", action="store_true", help="Run all available checks")
+    parser.add_argument("--from-file", default=None, help="Instead of acquiring from phone, load an existing packages.json file for lookups (mainly for debug purposes)")
     args = parser.parse_args()
 
-    if not args.packages:
+    if not args.from_file:
         # TODO: Need to come up with a better folder name.
         acq_folder = datetime.datetime.now().isoformat().split(".")[0].replace(":", "")
         storage_folder = os.path.join(args.storage, acq_folder)
@@ -51,10 +53,11 @@ def main():
     logo()
 
     try:
-        if args.packages:
-            acq = Acquisition.fromJSON(args.packages)
+        if args.from_file:
+            acq = Acquisition.fromJSON(args.from_file)
         else:
-            acq = Acquisition(storage_folder, args.limit)
+            acq = Acquisition(storage_folder=storage_folder,
+                all_apks=args.all_apks, limit=args.limit)
             acq.run()
         
         packages = acq.packages
@@ -62,11 +65,13 @@ def main():
         if len(packages) == 0:
             return
 
-        if args.virustotal or args.all:
+        if args.virustotal or args.all_checks:
             virustotal_lookup(packages)
 
-        if args.koodous or args.all:
+        if args.koodous or args.all_checks:
             koodous_lookup(packages)
+
+        known_bad(packages)
     except KeyboardInterrupt:
         print("")
         sys.exit(-1)

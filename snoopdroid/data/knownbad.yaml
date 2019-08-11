@@ -1,0 +1,45 @@
+- package: com.vvt.android.syncmanager
+  name: FlexiSpy
+  reference: https://www.vice.com/en_us/article/aemeae/meet-flexispy-the-company-getting-rich-selling-stalkerware-to-jealous-lovers
+  tags:
+    - stalkerware
+- package: android.sys.process
+  name: mSpy
+  reference:
+  tags:
+    - stalkerware
+- package: system.framework
+  name: mSpy
+  reference:
+  tags:
+    - stalkerware
+- package: com.mspy.lite
+  name: mSpy
+  reference:
+  tags:
+    - stalkerware
+- package: com.spy2mobile.light
+  name: spy2mobile
+  reference:
+  tags:
+    - stalkerware
+- package: com.wifiset.service
+  name: SpyHide
+  reference:
+  tags:
+    - stalkerware
+- package: com.systemservice
+  name: TheTruthSpy
+  reference:
+  tags:
+    - stalkerware
+- package: com.android.core.monitor.debug
+  name: Hoverwatch
+  reference:
+  tags:
+    - stalkerware
+- package: org.secure.smsgps
+  name: Highster Mobile
+  reference:
+  tags:
+    - stalkerware
