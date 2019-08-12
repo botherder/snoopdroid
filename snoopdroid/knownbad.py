@@ -39,7 +39,7 @@ def known_bad(packages):
     found_baddies = []
     for package in packages:
         for baddy in baddies:
-            if package.name == baddy["package"]:
+            if package.name.lower() == baddy["package"].lower():
                 found_baddies.append(baddy)
 
     if not found_baddies:
