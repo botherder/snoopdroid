@@ -28,9 +28,9 @@ def known_bad(packages):
     print(info("Looking for known bad packages installed"))
     print("")
 
-    yaml_path = os.path.join("data", "knownbad.yaml")
+    yaml_path = os.path.join(os.path.dirname(__file__), "data", "knownbad.yaml")
     if not os.path.exists(yaml_path):
-        print(error("I can not find the `knownbad.yaml` file. Have you installed Snoopdroid correctly?"))
+        print(error("I can not find the `knownbad.yaml` file at {}. Have you installed Snoopdroid correctly?".format(yaml_path)))
         return
 
     with open(yaml_path) as handle:
