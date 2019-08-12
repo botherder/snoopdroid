@@ -68,8 +68,12 @@ def main():
         if args.virustotal or args.all_checks:
             virustotal_lookup(packages)
 
+        print("")
+
         if args.koodous or args.all_checks:
             koodous_lookup(packages)
+
+        print("")
 
         known_bad(packages)
     except KeyboardInterrupt:

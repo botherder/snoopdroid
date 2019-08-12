@@ -62,7 +62,8 @@ class Acquisition(object):
     def __load_knowngood(self):
         knowngood_path = os.path.join('data', 'knowngood.txt')
         knowngood_string = pkg_resources.resource_string(__name__, knowngood_path)
-        self.__known_good.extend(knowngood_string.split('\n'))
+        knowngood_list = knowngood_string.decode('utf-8').split('\n')
+        self.__known_good.extend(knowngood_list)
 
     def __clean_output(self, output):
         return output.strip().replace('package:', '')
