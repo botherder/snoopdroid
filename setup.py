@@ -46,7 +46,7 @@ def get_package_data(package):
 
 setup(
     name="snoopdroid",
-    version="2.0",
+    version="2.1",
     author="Claudio Guarnieri",
     author_email="nex@nex.sx",
     description=description,
