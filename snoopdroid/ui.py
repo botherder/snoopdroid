@@ -21,6 +21,8 @@ from tqdm import tqdm
 from colorama import init
 from termcolor import colored
 
+from .constants import __version__
+
 def logo():
     print("                                   _           _     _      ")
     print("                                  | |         (_)   | |     ")
@@ -29,7 +31,7 @@ def logo():
     print("  \\__ \\ | | | (_) | (_) | |_) | (_| | | | (_) | | (_| |   ")
     print("  |___/_| |_|\\___/ \\___/| .__/ \\__,_|_|  \\___/|_|\\__,_|")
     print("                        | |                                 ")
-    print("                        |_|                                 ")
+    print("                        |_|                    v{}          ".format(__version__))
     print("                                                            ")
 
 

@@ -18,6 +18,8 @@
 import os
 from setuptools import setup
 
+from snoopdroid.constants import __version__
+
 description = "Extract all apks from an Android device and check for malicious apps"
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
@@ -46,7 +48,7 @@ def get_package_data(package):
 
 setup(
     name="snoopdroid",
-    version="2.1",
+    version=__version__,
     author="Claudio Guarnieri",
     author_email="nex@nex.sx",
     description=description,
