@@ -34,6 +34,7 @@ def koodous_lookup(packages):
     print(info("This might take a while..."))
     print("")
 
+    detections = {}
     table_data = []
     table_data.append(["Package name", "File path", "Trusted", "Detected", "Rating"])
 
@@ -56,6 +57,10 @@ def koodous_lookup(packages):
                     detected = "no"
                     if report["detected"]:
                         detected = red("yes")
+                        detections[file["sha256"]] = {
+                            'name': package.name,
+                            'detected': True
+                        }
 
                     rating = "0"
                     if int(report["rating"]) < 0:
@@ -73,3 +78,4 @@ def koodous_lookup(packages):
 
     table = AsciiTable(table_data)
     print(table.table)
+    return detections

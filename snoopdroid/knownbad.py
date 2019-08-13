@@ -61,3 +61,4 @@ def known_bad(packages):
 
     table = AsciiTable(table_data)
     print(table.table)
+    return found_baddies
