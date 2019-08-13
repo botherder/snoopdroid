@@ -50,6 +50,7 @@ def virustotal_lookup(packages):
     print("")
 
     detections = {}
+    suspicious_apps = {}
 
     def virustotal_query(batch):
         report = get_virustotal_report(batch)
@@ -86,11 +87,23 @@ def virustotal_lookup(packages):
                 detection = detections[file["sha256"]]
                 positives = detection.split("/")[0]
                 if int(positives) > 0:
+                    if file["sha256"] not in suspicious_apps:
+                        suspicious_apps[file["sha256"]] = {
+                            'name': package.name,
+                            'found': True,
+                            'detection': detection
+                        }
                     row.append(red(detection))
                 else:
                     row.append(detection)
             else:
                 row.append("not found")
+                if file["sha256"] not in suspicious_apps:
+                    suspicious_apps[file["sha256"]] = {
+                        'name': package.name,
+                        'found': False,
+                        'detection': None
+                    }
 
             table_data.append(row)
 
@@ -98,3 +111,4 @@ def virustotal_lookup(packages):
 
     table = AsciiTable(table_data)
     print(table.table)
+    return suspicious_apps

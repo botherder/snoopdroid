@@ -22,12 +22,14 @@ import os
 import sys
 import argparse
 import datetime
+import json
 
 from .ui import info, logo
 from .acquisition import Acquisition
 from .virustotal import virustotal_lookup
 from .koodous import koodous_lookup
 from .knownbad import known_bad
+
 
 def main():
     parser = argparse.ArgumentParser(description="Extract information from Android device")
@@ -59,26 +61,63 @@ def main():
             acq = Acquisition(storage_folder=storage_folder,
                 all_apks=args.all_apks, limit=args.limit)
             acq.run()
-        
-        packages = acq.packages
 
+        packages = acq.packages
         if len(packages) == 0:
             return
 
         if args.virustotal or args.all_checks:
-            virustotal_lookup(packages)
+            results_vt = virustotal_lookup(packages)
 
         print("")
 
         if args.koodous or args.all_checks:
-            koodous_lookup(packages)
+            results_koodous = koodous_lookup(packages)
 
         print("")
 
-        known_bad(packages)
+        results_known_bad = known_bad(packages)
+
+        if not args.from_file:
+            detections = {}
+            if args.virustotal or args.all_checks:
+                for r in results_vt:
+                    detections[r] = {
+                        'package': results_vt[r]['name'],
+                        'virustotal': {
+                            'found': results_vt[r]['found'],
+                            'detection': results_vt[r]['detection']
+                        }
+                    }
+            if args.koodous or args.all_checks:
+                for sha256 in results_koodous:
+                    if sha256 in detections:
+                        detections[sha256]['koodous'] = {'detected': True}
+                    else:
+                        detections[sha256] = {
+                            'package': results_koodous[sha256]['name'],
+                            'koodous': {'detected': True}
+                        }
+            if results_known_bad:
+                results_pkg = dict([(p['package'], p) for p in results_known_bad])
+                for package in packages:
+                    if package.name in results_pkg:
+                        for file in package.files:
+                            if file["sha256"] in detections:
+                                detections[file["sha256"]]['known_bad'] = results_pkg[package.name]
+                            else:
+                                detections[file["sha256"]] = {
+                                    'package': package.name,
+                                    'known_bad': results_pkg[package.name]
+                                }
+            if detections != {}:
+                json_path = os.path.join(storage_folder, "detections.json")
+                with open(json_path, "w") as handle:
+                    json.dump(detections, handle, indent=4)
     except KeyboardInterrupt:
         print("")
         sys.exit(-1)
+
 
 if __name__ == "__main__":
     main()

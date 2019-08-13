@@ -77,5 +77,5 @@ snoopdroid --koodous
 Or, to launch all available lookups:
 
 ```
-snoopdroid --all
+snoopdroid --all-checks
 ```

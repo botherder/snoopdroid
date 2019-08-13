@@ -34,7 +34,7 @@ def known_bad(packages):
         return
 
     with open(yaml_path) as handle:
-        baddies = yaml.load(handle)
+        baddies = yaml.load(handle, Loader=yaml.FullLoader)
 
     found_baddies = []
     for package in packages:
@@ -61,3 +61,4 @@ def known_bad(packages):
 
     table = AsciiTable(table_data)
     print(table.table)
+    return found_baddies
