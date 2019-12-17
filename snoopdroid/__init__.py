@@ -39,22 +39,16 @@ def main():
     parser.add_argument("--from-file", default=None, help="Instead of acquiring from phone, load an existing packages.json file for lookups (mainly for debug purposes)")
     args = parser.parse_args()
 
-    if not args.from_file:
-        # TODO: Need to come up with a better folder name.
-        acq_folder = datetime.datetime.now().isoformat().split(".")[0].replace(":", "")
-        storage_folder = os.path.join(args.storage, acq_folder)
-
-        if not os.path.exists(storage_folder):
-            os.mkdir(storage_folder)
-
-        print(info("Starting acquisition at folder {}\n".format(storage_folder)))
-
     logo()
 
     try:
         if args.from_file:
             acq = Acquisition.fromJSON(args.from_file)
         else:
+            # TODO: Need to come up with a better folder name.
+            acq_folder = datetime.datetime.now().isoformat().split(".")[0].replace(":", "")
+            storage_folder = os.path.join(args.storage, acq_folder)
+
             acq = Acquisition(storage_folder=storage_folder,
                 all_apks=args.all_apks, limit=args.limit)
             acq.run()

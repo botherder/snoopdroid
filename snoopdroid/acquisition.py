@@ -129,6 +129,11 @@ class Acquisition(object):
         print("")
 
     def pull_packages(self):
+        print(info("Starting acquisition at folder {}\n".format(self.storage_folder)))
+
+        if not os.path.exists(self.storage_folder):
+            os.mkdir(self.storage_folder)
+
         print(info("Downloading packages from device. This might take some time ..."))
         print("")
 
@@ -178,14 +183,14 @@ class Acquisition(object):
 
                 # We store the apk to disk.
                 file_path = os.path.join(storage_folder_apk, "{}{}.apk".format(package.name, file_name))
-                counter = 0
+                name_counter = 0
                 while True:
                     if not os.path.exists(file_path):
                         break
 
-                    counter += 1
+                    name_counter += 1
                     file_path = os.path.join(storage_folder_apk, "{}{}_{}.apk".format(
-                        package.name, file_name, counter))
+                        package.name, file_name, name_counter))
 
                 with open(file_path, "wb") as handle:
                     handle.write(data)
