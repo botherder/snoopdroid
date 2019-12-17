@@ -27,6 +27,7 @@ from .ui import info, logo
 from .acquisition import Acquisition
 from .virustotal import virustotal_lookup
 from .koodous import koodous_lookup
+from .knownbad import known_bad
 
 def main():
     parser = argparse.ArgumentParser(description="Extract information from Android device")
@@ -71,6 +72,10 @@ def main():
 
         if args.koodous or args.all_checks:
             koodous_lookup(packages)
+
+        print("")
+
+        known_bad(packages)
     except KeyboardInterrupt:
         print("")
         sys.exit(-1)

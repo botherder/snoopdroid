@@ -32,7 +32,7 @@ requires = (
     "halo",
     "requests",
     "terminaltables",
-    "adb-shell",
+    "adb",
 )
 
 def get_package_data(package):

@@ -23,9 +23,11 @@ import json
 import time
 import shutil
 import pkg_resources
+from usb1 import USBErrorBusy, USBErrorAccess
 
-from adb_shell.adb_device import AdbDeviceTcp
-from adb_shell.auth.sign_pythonrsa import PythonRSASigner
+from adb import adb_commands
+from adb import sign_pythonrsa
+from adb.usb_exceptions import DeviceAuthError
 
 from .ui import PullProgress, info, highlight, error
 from .utils import get_sha256
@@ -67,16 +69,35 @@ class Acquisition(object):
         return output.strip().replace("package:", "")
 
     def connect(self):
+        # Maybe one day they will merge:
+        # https://github.com/google/python-adb/pull/142
         priv_key_path = os.path.expanduser("~/.android/adbkey")
         with open(priv_key_path, "rb") as handle:
             priv_key = handle.read()
-        signer = PythonRSASigner("", priv_key)
+        pub_key_path = priv_key_path + ".pub"
+        with open(pub_key_path, "rb") as handle:
+            pub_key = handle.read()
 
-        self.device = AdbDeviceTcp("127.0.0.1", 5555, default_timeout_s=9.)
-        self.device.connect(rsa_keys=[signer], auth_timeout_s=0.1)
+        signer = sign_pythonrsa.PythonRSASigner(pub_key, priv_key)
+        self.device = adb_commands.AdbCommands()
+
+        while True:
+            try:
+                self.device.ConnectDevice(rsa_keys=[signer])
+            except (USBErrorBusy, USBErrorAccess):
+                print(error("Device is busy, maybe run `adb kill-server` and try again."))
+                sys.exit(-1)
+            except DeviceAuthError:
+                print(error("You need to authorize this computer on the Android device. Retrying in 5 seconds..."))
+                time.sleep(5)
+            except Exception as e:
+                print(error(repr(e)))
+                sys.exit(-1)
+            else:
+                break
 
     def disconnect(self):
-        self.device.close()
+        self.device.Close()
 
     def reconnect(self):
         print(info("Reconnecting ..."))
@@ -89,7 +110,7 @@ class Acquisition(object):
         if not self.all_apks:
             self.__load_knowngood()
 
-        output = self.device.shell("pm list packages")
+        output = self.device.Shell("pm list packages")
         total = 0
         for line in output.split("\n"):
             package_name = self.__clean_output(line)
@@ -127,7 +148,7 @@ class Acquisition(object):
             print("[{}/{}] Package: {}".format(counter, total_packages, highlight(package.name)))
 
             try:
-                output = self.device.shell("pm path {}".format(package.name))
+                output = self.device.Shell("pm path {}".format(package.name))
                 output = self.__clean_output(output)
                 if not output:
                     continue
@@ -144,7 +165,7 @@ class Acquisition(object):
 
                 try:
                     with PullProgress(unit='B', unit_divisor=1024, unit_scale=True, miniters=1) as pp:
-                        data = self.device.pull(path, progress_callback=pp.update_to)
+                        data = self.device.Pull(path, progress_callback=pp.update_to)
                 except Exception as e:
                     print("ERROR: Failed to pull package file from {}: {}".format(path, e))
                     self.reconnect()
