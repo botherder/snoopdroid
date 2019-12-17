@@ -157,6 +157,15 @@ class Acquisition(object):
 
                 # We store the apk to disk.
                 file_path = os.path.join(storage_folder_apk, "{}{}.apk".format(package.name, file_name))
+                counter = 0
+                while True:
+                    if not os.path.exists(file_path):
+                        break
+
+                    counter += 1
+                    file_path = os.path.join(storage_folder_apk, "{}{}_{}.apk".format(
+                        package.name, file_name, counter))
+
                 with open(file_path, "wb") as handle:
                     handle.write(data)
 
