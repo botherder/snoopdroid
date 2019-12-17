@@ -125,7 +125,8 @@ class Acquisition(object):
             if package_name not in self.packages:
                 self.packages.append(Package(package_name))
 
-        print(info("There are {} packages installed on the device. I selected {} for inspection.".format(total, len(self.packages))))
+        print(info("There are {} packages installed on the device. I selected {} for inspection.".format(
+            total, len(self.packages))))
         print("")
 
     def pull_packages(self):
