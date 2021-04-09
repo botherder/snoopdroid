@@ -1,6 +1,8 @@
 Snoopdroid
 ==========
 
+**PLEASE NOTE: This project has been abandoned in favor of [Snoopdroid 2](https://github.com/botherder/snoopdroid2), which is a complete rewrite in Go to simplify portability. Check it out.***
+
 Snoopdroid is a simple utility to automate the process of extracting installed apps from an Android phone using the [Android Debug Bridge](https://developer.android.com/studio/command-line/adb). Optionally, Snoopdroid is able to lookup the extracted packages on various online services in order to attempt to immediately recognize any known malicious apps.
 
 <p align="center"><img src="/img/snoopdroid.png?raw=true"/></p>
